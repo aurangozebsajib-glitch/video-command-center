@@ -1,0 +1,7 @@
+[
+  {"name": "Pollinations", "url": "https://pollinations.ai", "limit": "Unlimited", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "Best for automation, no API key"},
+  {"name": "Perchance AI", "url": "https://perchance.org/ai-text-to-image-generator", "limit": "Unlimited", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "Fast, no filter"},
+  {"name": "Leonardo AI", "url": "https://leonardo.ai", "limit": "150 tokens/day", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Very high quality"},
+  {"name": "Craiyon", "url": "https://craiyon.com", "limit": "Unlimited", "login": "No", "watermark": "Yes", "camoufox": "Yes", "notes": "Slow but unlimited"},
+  {"name": "Dezgo", "url": "https://dezgo.com", "limit": "Unlimited", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "SDXL free"}
+]

@@ -1,0 +1,6 @@
+[
+  {"name": "CapCut Online", "url": "https://capcut.com/editor", "limit": "Unlimited, no watermark", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Best free editor - auto-captions, effects"},
+  {"name": "Clipchamp", "url": "https://clipchamp.com", "limit": "Unlimited 1080p", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Microsoft free"},
+  {"name": "Canva Video", "url": "https://canva.com/video-editor", "limit": "Free 5 min export", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Templates"},
+  {"name": "VEED.io", "url": "https://veed.io", "limit": "Free 10 min, watermark", "login": "Yes", "watermark": "Yes", "camoufox": "Yes", "notes": "Auto-subtitles free"}
+]

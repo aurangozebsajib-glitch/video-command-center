@@ -1,1 +1,28 @@
-<!DOCTYPE html><html><body><form id="genForm"><input type="text" id="topic" placeholder="Video Topic"><button type="submit">Generate</button></form><script>document.getElementById("genForm").addEventListener("submit", (e) => { e.preventDefault(); alert("Queue feature connected"); });</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Command Center</title>
+    <style>
+        body { background: #121212; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .card { border: 1px solid #00ffcc; padding: 10px; margin: 10px; display: inline-block; width: 300px; }
+        button { background: #00ffcc; color: #121212; border: none; padding: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Video Command Center</h1>
+    <div id="content">Loading dashboard...</div>
+    <script>
+        // Simple loader for demo
+        fetch('data/free_image_sites.json')
+            .then(res => res.json())
+            .then(data => {
+                let html = '<h2>Image Sites</h2>';
+                data.forEach(site => {
+                    html += \`<div class='card'><h3>\${site.name}</h3><p>Limit: \${site.limit}</p><button onclick="window.open('\${site.url}')">Go</button></div>\`;
+                });
+                document.getElementById('content').innerHTML = html;
+            });
+    </script>
+</body>
+</html>

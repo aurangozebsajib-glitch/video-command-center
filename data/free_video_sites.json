@@ -1,0 +1,7 @@
+[
+  {"name": "Pika Labs", "url": "https://pika.art", "limit": "30 videos/week free", "login": "Yes", "watermark": "Yes", "camoufox": "Yes", "notes": "Best free text-to-video"},
+  {"name": "Runway", "url": "https://runwayml.com", "limit": "125 credits once", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Gen-3 quality"},
+  {"name": "CapCut AI Video", "url": "https://capcut.com/tools/ai-video-generator", "limit": "Unlimited free", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "No watermark, best for automation"},
+  {"name": "PixVerse", "url": "https://pixverse.ai", "limit": "50 credits/day", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Good for viral videos"},
+  {"name": "Haiper", "url": "https://haiper.ai", "limit": "Free 10 videos/day", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Fast"}
+]

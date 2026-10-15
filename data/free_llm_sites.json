@@ -1,0 +1,5 @@
+[
+  {"name": "Pollinations LLM", "url": "https://text.pollinations.ai", "limit": "Unlimited", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "OpenAI compatible free"},
+  {"name": "Perplexity", "url": "https://perplexity.ai", "limit": "5 Pro searches/day", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Best for research"},
+  {"name": "ChatGPT Free", "url": "https://chat.openai.com", "limit": "Limited GPT-4o", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Need account"}
+]
