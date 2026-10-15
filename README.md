@@ -1,1 +1,1 @@
-# video-command-center
+Video Command Center - Auto video generation
