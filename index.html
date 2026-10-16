@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Video Command Center</title>
-    <style>
-        body { background: #121212; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .card { border: 1px solid #00ffcc; padding: 10px; margin: 10px; display: inline-block; width: 300px; }
-        button { background: #00ffcc; color: #121212; border: none; padding: 5px; cursor: pointer; }
-    </style>
+<meta charset="UTF-8">
+<title>FREE AI EMPIRE</title>
+<style>body{background:#0a0a0a;color:#00ffcc;font-family:monospace;padding:20px}h1{color:#00ffcc}.tabs{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap}.tab{padding:8px 16px;border:1px solid #333;border-radius:20px;cursor:pointer}.tab.active{background:#00ffcc;color:#000}.card{background:#151515;border:1px solid #222;border-radius:12px;padding:15px;margin:10px;width:300px;display:inline-block;vertical-align:top}.badge{font-size:10px;padding:2px 6px;border:1px solid #00ffcc;border-radius:10px;margin:2px;display:inline-block}button{padding:6px 12px;margin:5px;background:#00ffcc;border:none;border-radius:6px;cursor:pointer;font-weight:bold}</style>
 </head>
 <body>
-    <h1>Video Command Center</h1>
-    <div id="content">Loading dashboard...</div>
-    <script>
-        // Simple loader for demo
-        fetch('data/free_image_sites.json')
-            .then(res => res.json())
-            .then(data => {
-                let html = '<h2>Image Sites</h2>';
-                data.forEach(site => {
-                    html += \`<div class='card'><h3>\${site.name}</h3><p>Limit: \${site.limit}</p><button onclick="window.open('\${site.url}')">Go</button></div>\`;
-                });
-                document.getElementById('content').innerHTML = html;
-            });
-    </script>
+<h1>FREE AI EMPIRE // Video Command Center</h1>
+<div class="tabs" id="tabs"></div>
+<div id="container">Loading...</div>
+<script>
+const cats=[{id:'image',label:'Image Gen',file:'data/free_image_sites.json'},{id:'video',label:'Video Gen',file:'data/free_video_sites.json'},{id:'edit',label:'Video Edit',file:'data/free_video_edit_sites.json'},{id:'tts',label:'TTS',file:'data/free_tts_sites.json'},{id:'llm',label:'LLM',file:'data/free_llm_sites.json'}];
+async function load(p){try{let r=await fetch('./'+p+'?t='+Date.now());return await r.json();}catch(e){return null;}}
+async function show(id){
+ document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',cats[i].id===id));
+ const cat=cats.find(c=>c.id===id);
+ document.getElementById('container').innerHTML='Loading '+cat.label+'...';
+ let d=await load(cat.file);
+ if(!d){document.getElementById('container').innerHTML='Failed to load '+cat.file;return;}
+ document.getElementById('container').innerHTML=d.map(s=>'<div class=card><h3>'+s.name+'</h3><div><span class=badge>'+s.limit+'</span> <span class=badge>'+s.login+'</span></div><div style=font-size:12px;color:#888;margin:8px 0>'+s.notes+'</div><div style=font-size:10px;color:#666>'+s.url+'</div><div><button onclick=window.open(\''+s.url+'\')>Go</button> <button onclick=alert(\'Run: python automations/camoufox_runner.py '+s.name+'\')>Camoufox</button></div></div>').join('');
+}
+document.getElementById('tabs').innerHTML=cats.map(c=>'<div class=tab onclick=show(\''+c.id+'\')>'+c.label+'</div>').join('');
+show('image');
+</script>
 </body>
 </html>
