@@ -101,10 +101,17 @@ def try_hf_space(context, space, image_path, motion_prompt):
         except: pass
         return {"success":False, "error":str(e)}
 
+def load_tool_map():
+    mp = Path("jobs/hf_tool_map.json")
+    if mp.exists():
+        return json.loads(mp.read_text())
+    return []
+
 def run_pathway():
     qp = get_queue_path()
     rp = get_results_path()
-    print(f"Queue: {qp}, Results: {rp}, Profile: {PROFILE}")
+    tool_map = load_tool_map()
+    print(f"Queue: {qp}, Results: {rp}, Profile: {PROFILE}, Tool map: {len(tool_map)} tools")
     if not qp.exists():
         print(f"No queue at {qp}")
         return
@@ -126,24 +133,23 @@ def run_pathway():
             motion = get_qwen_motion_prompt(ctx, topic)
             print(f"Motion: {motion}")
             result = None
-            for space in HF_SPACES[:3]:
-                res = try_hf_space(ctx, space, image_path, motion)
+            mapped_tools = [t for t in tool_map if t.get("working") and t.get("type")=="img2vid"][:3]
+            for tool in mapped_tools:
+                res = try_hf_space(ctx, tool, image_path, motion)
                 if res.get("success"):
                     result = res
                     break
-                print(f"Retry next space...")
+                print(f"Retry next tool...")
             if not result:
-                print("All 3 failed")
+                print("All mapped tools failed")
                 job["status"]="failed"
                 continue
             print(f"SUCCESS {result}")
-            # MEGA check
             mp = ctx.new_page()
             mp.goto("https://mega.nz/fm/4M0W1R4B")
             mp.wait_for_timeout(5000)
             print(f"MEGA url: {mp.url} logged? {'fm' in mp.url}")
             mp.close()
-            # save
             if not rp.exists():
                 rp.write_text("[]")
             results = json.loads(rp.read_text())
