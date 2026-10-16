@@ -1,4 +1,4 @@
-import os, json, time
+import os, json, time, requests
 from pathlib import Path
 from camoufox.sync_api import Camoufox
 
@@ -23,7 +23,7 @@ HF_SPACES = [
 def get_qwen_motion_prompt(context, topic):
     print(f"Getting Qwen motion for: {topic}")
     page = context.new_page()
-    page.goto("https://chat.qwen.ai/", timeout=60000)
+    page.goto("https://www.qwen.com/", timeout=60000)
     page.wait_for_timeout(5000)
     try:
         box = page.locator("textarea").first
@@ -39,51 +39,67 @@ def get_qwen_motion_prompt(context, topic):
         return f"slow zoom in, camera pan, cinematic, {topic}"
 
 def try_hf_space(context, space, image_path, motion_prompt):
-    print(f"Trying {space['name']}")
+    print(f"Trying {space['name']} with image {image_path}")
     page = context.new_page()
     try:
         page.goto(space['url'], timeout=90000)
-        page.wait_for_timeout(10000)
-        files = page.locator("input[type=file]").all()
-        if files:
-            files[0].set_input_files(image_path)
-            print("Image uploaded")
-            page.wait_for_timeout(3000)
-        # fill prompt
+        page.wait_for_timeout(12000)
+        page.evaluate("() => { document.querySelectorAll('input[type=file]').forEach(el=>{el.style.display='block'; el.style.visibility='visible';}) }")
+        file_inputs = page.locator("input[type=file]").all()
+        print(f"Found {len(file_inputs)} file inputs")
+        uploaded = False
+        for fi in file_inputs:
+            try:
+                fi.set_input_files(image_path)
+                print("Set input files OK")
+                uploaded = True
+                page.wait_for_timeout(3000)
+                break
+            except Exception as e:
+                print(f"Upload attempt fail: {e}")
+                continue
+
+        if not uploaded:
+            drop = page.locator("text=Drop Image Here").first
+            if drop.count()>0:
+                print("Found drop area, trying...")
+
+        page.wait_for_timeout(2000)
+        if page.locator("img").count() > 1:
+            print("Image appears uploaded (img tag found)")
+
         for tb in page.locator("textarea").all():
             try:
                 if tb.is_visible():
                     tb.fill(motion_prompt)
+                    print(f"Filled prompt: {motion_prompt}")
                     break
             except:
                 pass
-        # click generate
-        for btn in page.locator("button").all():
-            try:
-                t = btn.inner_text().lower()
-                if "generate" in t or "run" in t:
-                    if btn.is_visible():
-                        btn.click()
-                        break
-            except:
-                pass
-        # wait for video
+
+        gen_btn = page.locator("button:has-text('Generate')").first
+        if gen_btn.count()>0:
+            gen_btn.scroll_into_view_if_needed()
+            page.wait_for_timeout(1000)
+            gen_btn.click()
+            print("Clicked Generate")
+
         for i in range(60):
             page.wait_for_timeout(5000)
-            if page.locator("video").count() > 0:
-                print(f"Video found in {space['name']}")
-                v = page.locator("video").first
-                src = v.get_attribute("src")
-                print(f"SRC: {src}")
+            if page.locator("video").count()>0:
+                src = page.locator("video").first.get_attribute("src")
+                print(f"VIDEO FOUND: {src}")
                 page.close()
                 return {"success":True, "url":src, "space":space['name']}
+            print(f"Waiting video... {i*5}s")
+
         page.close()
-        return {"success":False}
+        return {"success":False, "error":"no video after 300s"}
     except Exception as e:
-        print(f"Fail {space['name']}: {e}")
+        print(f"Space error {e}")
         try: page.close()
         except: pass
-        return {"success":False}
+        return {"success":False, "error":str(e)}
 
 def run_pathway():
     qp = get_queue_path()
@@ -100,13 +116,13 @@ def run_pathway():
         job_id = job.get("id","test_001")
         print(f"\n=== Job {job_id}: {topic} ===")
         with Camoufox(persistent_context=True, user_data_dir=PROFILE, headless=False) as ctx:
-            img_page = ctx.pages[0] if ctx.pages else ctx.new_page()
-            img_url = f"https://image.pollinations.ai/prompt/{topic.replace(' ','%20')}?width=1024&height=576&nologo=true"
-            img_page.goto(img_url)
-            img_page.wait_for_timeout(5000)
+            img_url = f"https://image.pollinations.ai/prompt/{topic.replace(' ','%20')}?width=1024&height=576&nologo=true&seed={int(time.time())}"
+            print(f"Downloading image: {img_url}")
             image_path = f"/tmp/image_{job_id}.png"
-            img_page.screenshot(path=image_path)
-            print(f"Image: {image_path}")
+            r = requests.get(img_url, timeout=30)
+            r.raise_for_status()
+            open(image_path, 'wb').write(r.content)
+            print(f"Real image saved {len(r.content)} bytes: {image_path}")
             motion = get_qwen_motion_prompt(ctx, topic)
             print(f"Motion: {motion}")
             result = None
