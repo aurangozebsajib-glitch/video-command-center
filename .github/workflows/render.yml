@@ -26,10 +26,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Render video
-        run: manim -qh scene.py AutomatedIntro
+        run: manim -qh scene.py PythonTutorial
 
       - name: Upload rendered video
         uses: actions/upload-artifact@v4
         with:
           name: final-manim-video
-          path: media/videos/scene/1080p60/AutomatedIntro.mp4
+          path: media/videos/scene/1080p60/PythonTutorial*.mp4
