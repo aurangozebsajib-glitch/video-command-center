@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: final-manim-video
-          path: media/videos/scene/1080p60/PythonTutorial*.mp4
+          path: media/videos/scene/1080p60/PythonTutorial.mp4
