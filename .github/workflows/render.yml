@@ -1,0 +1,35 @@
+name: Render Manim video
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - scene.py
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libcairo2-dev libpango1.0-dev pkg-config python3-dev
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Render video
+        run: manim -qh scene.py AutomatedIntro
+
+      - name: Upload rendered video
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-manim-video
+          path: media/videos/scene/1080p60/AutomatedIntro.mp4
