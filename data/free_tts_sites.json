@@ -1,6 +1,0 @@
-[
-  {"name": "Edge TTS (Microsoft)", "url": "https://edge-tts", "limit": "Unlimited FREE", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "BEST - 400+ voices, unlimited, use via camoufox python edge-tts lib"},
-  {"name": "ElevenLabs", "url": "https://elevenlabs.io", "limit": "10 min/month free", "login": "Yes", "watermark": "No", "camoufox": "Yes", "notes": "Most realistic voice"},
-  {"name": "TTSMaker", "url": "https://ttsmaker.com", "limit": "20,000 chars/week free", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "600+ voices"},
-  {"name": "NaturalReader", "url": "https://naturalreaders.com", "limit": "20 min/day free", "login": "No", "watermark": "No", "camoufox": "Yes", "notes": "Good for YouTube voiceover"}
-]

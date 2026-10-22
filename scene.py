@@ -12,4 +12,4 @@ class AutomatedIntro(Scene):
         title = Text("Automated in the Cloud!", color=YELLOW).scale(0.7)
         title.next_to(square, DOWN, buff=0.5)
         self.play(FadeIn(title))
-        self.wait()
+        self.wait(2)
